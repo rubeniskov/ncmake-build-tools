@@ -11,8 +11,10 @@ platform:
 
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
-  - ps: $app = Get-WmiObject -Class Win32_Product | Where-Object {$_.Name -match ".NET Framework 4.6"}
-        $app.Uninstall()
+  - ps: $apps=Get-WmiObject -Class Win32_Product | Where-Object {$_.Name -match ".NET Framework 4.6" -or $_.Name -match "Build Tools"}
+        foreach ($app in $apps) {
+          $app.Uninstall()
+        }
   - set PATH=%APPDATA%\npm;%APPVEYOR_BUILD_FOLDER%\node_modules\.bin;%PATH%
   - npm install --ignore-scripts
   - npm run build
