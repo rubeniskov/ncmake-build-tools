@@ -1,10 +1,10 @@
 import tools from './tools';
 
-export default() => {
+export default(options) => {
     return tools.waterfall([
         () => {
             return tools.winCheckNetFrameworkVersionInstalled('4.6').then((installed) => {
-                if (installed) {
+                if (!options.force && installed) {
                     console.log('--- Net Framework 4.6 already installed!');
                     return Promise.resolve(true);
                 } else {
@@ -20,7 +20,7 @@ export default() => {
         },
         () => {
             return tools.winCheckVSToolsInstalled('14.0').then((installed) => {
-                if (installed) {
+                if (!options.force && installed) {
                     console.log('--- Visual CPP Build Tools already installed!');
                     return Promise.resolve(true);
                 } else {

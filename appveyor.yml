@@ -21,6 +21,7 @@ install:
   - npm run build
   - npm run install
   - for /f %%i in ('node -v') do set exact_nodejs_version=%%i
+  - node bin\ncmake-build-tools install --force
   # - prebuild -b %exact_nodejs_version% --strip
 
 test_script:
