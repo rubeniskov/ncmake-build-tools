@@ -17,8 +17,8 @@ const tools = {
             });
         });
     },
-    tmpDir: (subdir) => {
-        return path.join([os.tmpDir(), subdir]);
+    tmpDir: (...args) => {
+        return path.join(...[os.tmpDir(), ...args]);
     },
     exec: (cmd, args, options) => {
         if (args && args.length === undefined) {
@@ -57,7 +57,7 @@ const tools = {
     },
     winCheckNetFrameworkVersionInstalled: (version) => {
       return tools.winGetNetFrameworkVersions().then((versions) => {
-          return !!versions.filter((version) => {
+          return !!(versions||[]).filter((version) => {
               return new RegExp(`^${version}`).test(version);
           }).length;
       });
