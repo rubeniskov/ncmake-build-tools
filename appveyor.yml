@@ -11,8 +11,8 @@ platform:
 
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
-  - ps: >-
-        $apps=Get-WmiObject -Class Win32_Product | Where-Object {$_.Name -match ".NET Framework 4.6" -or $_.Name -match "Build Tools"}
+  - ps: |
+        $apps=Get-WmiObject -Class Win32_Product | Where-Object {$_.Name -match ".NET Framework 4.6" -or $_.Name -match "Redist Package"}
         foreach ($app in $apps) {
           $app.Uninstall()
         }
