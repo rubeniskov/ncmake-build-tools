@@ -1,7 +1,6 @@
 version: "{build}"
 build: off
 skip_tags: true
-sudo: required
 environment:
   matrix:
     - nodejs_version: "6"
