@@ -1,10 +1,8 @@
 import yargs from 'yargs';
-import install from './install'
+import install from './install';
 
-export default(options) => {
-    const argv = yargs
-    .usage('$0 <cmd> [args]')
-    .command('install [name]', 'welcome ter yargs!', {
+export default options => {
+    const argv = yargs.usage('$0 <cmd> [args]').command('install [name]', 'welcome ter yargs!', {
         force: {
             alias: 'f',
             type: 'boolean',
@@ -15,16 +13,14 @@ export default(options) => {
             type: 'boolean',
             describe: 'print background process log to stdout'
         }
-    })
-    .help().argv;
+    }).help().argv;
 
     switch (argv._[0]) {
-      case 'install':
-          install(argv);
-        break;
-      case 'uninstall':
-          // install(argv);
-        break;
-      default:
+        case 'install':
+            return install({...argv, ...options});
+        case 'uninstall':
+            return null;
+        default:
+            break;
     }
-}
+};

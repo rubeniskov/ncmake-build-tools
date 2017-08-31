@@ -1,28 +1,28 @@
 import {ChildProcess} from 'child_process';
-import sudo from 'sudo-prompt';
-import util from 'util';
-import net from 'net';
 import stream from 'stream';
+import sudo from 'sudo-prompt';
 
-export default class SudoChildProcess extends ChildProcess {
-    call constructor(cmd, options){
-        return new SudoChildProcess(cmd, options);
-    }
-
-    constructor(cmd, options){
+export class SudoChildProcess extends ChildProcess {
+    constructor(cmd, options) {
         super();
-        
         this.stdout = new stream.PassThrough();
         this.stderr = new stream.PassThrough();
 
-        sudo.exec(cmd, {name: "Superuser execution", ...options}, (err, stdout, stderr) => {
-            if(err)
+        sudo.exec(cmd, {name: 'Superuser execution', ...options}, (err, stdout, stderr) => {
+            if (err) {
                 this.emit('error', err);
-            stdout && this.stdout.end(stdout);
-            stderr && this.stderr.end(stdout);
+            }
+            if (stdout) {
+                this.stdout.end(stdout);
+            }
+            if (stderr) {
+                this.stderr.end(stdout);
+            }
             process.nextTick(() => {
                 this.emit('close', err ? 127 : 0);
             });
         });
     }
 }
+
+export default (cmd, options) => (new SudoChildProcess(cmd, options));
