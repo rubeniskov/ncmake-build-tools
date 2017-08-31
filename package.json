@@ -6,7 +6,7 @@
   "scripts": {
     "install": "node bin/ncmake-build-tools install",
     "test": "ava",
-    "build": "xo && babel src --out-dir lib --copy-files",
+    "build": "xo src && babel src --out-dir lib --copy-files",
     "watch": "babel src --watch --out-dir lib --copy-files",
     "prepublishOnly": "npm run build"
   },
