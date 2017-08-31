@@ -1,0 +1,18 @@
+language: node_js
+os:
+  - linux
+  - osx
+dist: trusty
+cache:
+  bundler: true
+  directories:
+  - node_modules
+node_js:
+  - "v6.0.0"
+install:
+  - npm install --ignore-scripts
+before_script:
+  - npm run build
+  - node bin\ncmake-build-tools install --force
+script:
+  - npm test

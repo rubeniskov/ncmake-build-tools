@@ -9,6 +9,11 @@ export default(options) => {
             alias: 'f',
             type: 'boolean',
             describe: 'force install even if package are installed'
+        },
+        verbose: {
+            alias: 'v',
+            type: 'boolean',
+            describe: 'print background process log to stdout'
         }
     })
     .help().argv;

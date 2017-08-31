@@ -4,14 +4,40 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install": "node index.js",
+    "install": "node bin/ncmake-build-tools install --verbose",
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "babel src --out-dir lib --copy-files",
     "watch": "babel src --watch --out-dir lib --copy-files",
     "prepublishOnly": "npm run build"
   },
-  "author": "",
-  "license": "ISC",
+  "config": {
+    "unsafe-perm": true
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubeniskov/ncmake-build-tools.git",
+    "url_commit": "git+https://github.com/rubeniskov/ncmake-build-tools/commit",
+    "url_tag": "git+https://github.com/rubeniskov/ncmake-build-tools/releases/tag"
+  },
+  "author": {
+    "name": "Rubén López Gómez",
+    "email": "me@rubeniskov.com",
+    "url": "https://twitter.com/Rubeniskov"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/rubeniskov/ncmake-build-tools/blob/master/LICENSE.md"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/rubeniskov/ncmake-build-tools/issues"
+  },
+  "homepage": "http://rubeniskov.com/projects/ncmake-build-tools",
   "babel": {
     "presets": [
       "es2015",

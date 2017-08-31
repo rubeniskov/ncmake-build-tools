@@ -1,14 +1,11 @@
 version: "{build}"
 build: off
 skip_tags: true
-
 environment:
   matrix:
     - nodejs_version: "6"
-
 platform:
   - x86
-
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - ps: |
@@ -19,10 +16,7 @@ install:
   - set PATH=%APPDATA%\npm;%APPVEYOR_BUILD_FOLDER%\node_modules\.bin;%PATH%
   - npm install --ignore-scripts
   - npm run build
-  - npm run install
-  - for /f %%i in ('node -v') do set exact_nodejs_version=%%i
   - node bin\ncmake-build-tools install --force
-  # - prebuild -b %exact_nodejs_version% --strip
 
 test_script:
   - npm test

@@ -1,13 +1,19 @@
 import tools from './tools';
 
-export default () => {
+export default (options) => {
     return tools.macCheckXcodeInstalled().then((installed) => {
-        if (installed) {
+        if (!options.force && installed) {
             console.log('--- XCode already installed!');
             return Promise.resolve(true);
         } else {
             console.log('--- Installing XCode');
-            returntools.sudo("xcode-select --install", {name: 'Install XCode'});
+            return tools
+                  .exec(
+                  `xcode-select --install`, {
+                      ...options,
+                      name: 'Install XCode',
+                      sudo: true
+                  })
         }
     }).then(() => {});
 }

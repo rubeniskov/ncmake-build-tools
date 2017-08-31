@@ -3,56 +3,55 @@ import path from 'path';
 import fs from 'fs-extra';
 import os from 'os';
 import childProcess from 'child_process';
-import sudo from 'sudo-prompt';
+import sudoExec from './sudo-exec';
 import waterfall from 'promise-waterfall';
 
 const tools = {
     waterfall: waterfall,
-    sudo: (cmd, options) => {
-        return new Promise((resolve, reject) => {
-            sudo.exec(cmd, {name: "Super user execution", ...options}, (err, stdout, stderr) => {
-                if(err)
-                    return reject(err);
-                resolve(stdout, stderr);
-            });
-        });
-    },
+    // sudo: (cmd, options) => {
+    //     return new Promise((resolve, reject) => {
+    //         sudo.exec(cmd, {name: "Super user execution", ...options}, (err, stdout, stderr) => {
+    //             if(err)
+    //                 return reject(err);
+    //             resolve(stdout, stderr);
+    //         });
+    //     });
+    // },
     tmpDir: (...args) => {
         return path.join(...[os.tmpDir(), ...args]);
     },
-    exec: (cmd, args, options) => {
-        if (args && args.length === undefined) {
-            options = args;
-            args = [];
-        }
+    exec: (cmd, options) => {
 
         options = {
-            stdio: [
-                null, 'stdout'
-            ],
+            sudo: false,
+            verbose: false,
             ...options
         }
 
         return new Promise((resolve, reject) => {
-            let proc;
-            if (options.sudo) {
-                if ((/^win/).test(process.platform)) {
-                    proc = childProcess.execFile(path.join(__dirname, '..', 'scripts', 'sudo.bat'), [cmd].concat(args), options);
-                    proc = childProcess.execFile(cmd, args, options);
-                }
-            } else {
-                proc = childProcess.exec(cmd, args, options);
+            const proc = options.sudo
+                ? sudoExec(cmd, options)
+                : childProcess.exec(cmd, options);
+
+            if(options.verbose){
+                proc.stdout.on('data', (data) => {
+                    process.stdout.write(data);
+                });
+
+                proc.stderr.on('data', (data) => {
+                    process.stderr.write(data);
+                });
             }
-            proc.stdout.on('data', (data) => {
-                console.log(data);
-            });
-            proc.on('close', (code) => {
-                return code !== 0
+
+            proc
+              .on('close', (code) => {
+                  return code !== 0
                     ? reject(new Error(`Failed execution of ${cmd} with exit code ${code}`))
-                    : resolve(proc);
-            }).on('error', (err) => {
-                return reject(err);
-            });
+                    : resolve(code);
+              })
+              .on('error', (err) => {
+                  return reject(err);
+              });
         })
     },
     winCheckNetFrameworkVersionInstalled: (version) => {
@@ -92,14 +91,14 @@ const tools = {
             });
         });
     },
-    download: (url, dir, filename) => {
+    download: (url, dir, filename, options) => {
         return new Promise((resolve, reject) => {
             const filepath = path.join(dir, filename),
                 nuggetOptions = {
+                    ...options,
                     target: filename,
                     dir: dir,
                     resume: process.env.npm_config_resume || true,
-                    verbose: true,
                     strictSSL: process.env.npm_config_strict_ssl || false,
                     proxy: process.env.npm_config_proxy || process.env.PROXY || undefined,
                     sockets: process.env.npm_config_sockets || undefined
