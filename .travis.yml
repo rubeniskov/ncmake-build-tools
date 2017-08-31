@@ -13,6 +13,6 @@ install:
   - npm install --ignore-scripts
 before_script:
   - npm run build
-  - node bin\ncmake-build-tools install --force
+  - npm run install -- --verbose --force
 script:
   - npm test

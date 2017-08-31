@@ -16,7 +16,7 @@ install:
   - set PATH=%APPDATA%\npm;%APPVEYOR_BUILD_FOLDER%\node_modules\.bin;%PATH%
   - npm install --ignore-scripts
   - npm run build
-  - node bin\ncmake-build-tools install --force
+  - npm run install -- --verbose --force
 
 test_script:
   - npm test
