@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "install": "node bin/ncmake-build-tools install",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "build": "babel src --out-dir lib --copy-files",
+    "test": "ava",
+    "build": "xo && babel src --out-dir lib --copy-files",
     "watch": "babel src --watch --out-dir lib --copy-files",
     "prepublishOnly": "npm run build"
   },
@@ -55,13 +55,27 @@
       ]
     ]
   },
+  "ava": {
+    "verbose": true
+  },
+  "xo": {
+    "space": 4,
+    "esnext": true,
+    "rules": {
+      "operator-linebreak":  [2, "after", { "overrides": { "?": "ignore", ":": "ignore"} }],
+      "no-negated-condition": "off",
+      "one-var": ["error", "always"]
+    }
+  },
   "devDependencies": {
+    "ava": "^0.22.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-class-constructor-call": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1"
+    "babel-preset-stage-0": "^6.24.1",
+    "xo": "^0.18.2"
   },
   "dependencies": {
     "fs-extra": "^4.0.1",
